@@ -1,4 +1,4 @@
-from flask import  Flask, render_template, url_for, request
+from flask import  Flask, render_template, url_for, request, sessions, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import SignupForm
@@ -76,10 +76,16 @@ def signup():
             newuser = User(form.first_name.data, form.last_name.data, form.email.data, form.password.data)
             db.session.add(newuser)
             db.session.commit()
-            return "success"
+
+            session['email'] = newuser.email
+            return redirect(url_for('home'))
 
     elif request.method == 'GET':
         return render_template('signup.html', form=form)
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 
 if __name__=='__main__':
