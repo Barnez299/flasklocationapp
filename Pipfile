@@ -13,6 +13,7 @@ psycopg2 = "*"
 flask-wtf = "*"
 jinja2 = "*"
 psycopg2-binary = "*"
+wtforms = {extras = ["email"], version = "*"}
 
 [requires]
 python_version = "3.8"
