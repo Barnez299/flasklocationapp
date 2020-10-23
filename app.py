@@ -2,6 +2,9 @@ from flask import  Flask, render_template, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import SignupForm
+import psycopg2
+
+
 
 
 
@@ -32,7 +35,7 @@ class User(db.Model):
     firstname = db.Column(db.String(100))
     lastname = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True)
-    pwdhash = db.Column(db.String(54))
+    pwdhash = db.Column(db.String(100))
 
     def __init__(self, firstname, lastname, email, password):
         self.firstname = firstname.title()
@@ -70,6 +73,9 @@ def signup():
         if form.validate == False:
             return render_template('signup.html', form=form)
         else:
+            newuser = User(form.first_name.data, form.last_name.data, form.email.data, form.password.data)
+            db.session.add(newuser)
+            db.session.commit()
             return "success"
 
     elif request.method == 'GET':
